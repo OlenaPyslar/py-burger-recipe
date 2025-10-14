@@ -1,12 +1,16 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 
 
 class Validator(ABC):
-    def __set_name__(self, owner, name):
+    def __set_name__(self, owner: BurgerRecipe, name) -> None:
         self.protected_name = "_" + name
 
-    def __get__(self, obj, objtype=None):
-        return getattr(obj, self.protected_name)
+    def __get__(self, obj: BurgerRecipe, objtype: type = None):
+        if obj is None:
+            return self
+        else:
+            return getattr(obj, self.protected_name)
 
     def __set__(self, obj, value):
         self.validate(value)
@@ -27,13 +31,13 @@ class Number(Validator):
             raise TypeError("Quantity should be integer.")
         if not (self.min_value <= value <= self.max_value):
             raise ValueError(f"Quantity should not be less "
-                             f"than attribute {self.min_value} and "
-                             f"greater than attribute {self.max_value}.")
+                             f"than {self.min_value} and "
+                             f"greater than {self.max_value}.")
 
 
 class OneOf(Validator):
-    def __init__(self, *options) -> None:
-        self.options = options
+    def __init__(self, options: tuple) -> None:
+        self.options = tuple(options)
 
     def validate(self, value):
         if not (value in self.options):
