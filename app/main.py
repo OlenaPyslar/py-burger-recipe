@@ -50,7 +50,7 @@ class BurgerRecipe:
     tomatoes = Number(0, 3)
     cutlets = Number(1, 3)
     eggs = Number(0, 2)
-    sauce = OneOf("ketchup", "mayo", "burger")
+    sauce = OneOf(("ketchup", "mayo", "burger"))
 
     def __init__(self,
                  buns: int,
